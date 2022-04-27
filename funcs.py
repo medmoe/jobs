@@ -6,6 +6,7 @@ def show_help():
     print(
         """
         jobs usage: [options] [<file name> or <job to add>]:
+            -s      --show-all  :show all existing jobs
             -a 		--add		:add a new job
             -r		--remove	:remove an existed job
             -g		--get		:retrieve an existed job
@@ -51,9 +52,10 @@ def add(con, name, date, job_title=None, add=True):
     con.close()
 
 
-def get(con, name):
+def get(con, name, get_all=False):
     cur = con.cursor()
-    cur.execute(f"SELECT * FROM jobs WHERE name = '{name}'")
+    query = "SELECT * FROM jobs" if get_all else f"SELECT * FROM jobs WHERE name = '{name}'"
+    cur.execute(query)
     res = cur.fetchall()
     print("Company\t\tDate\t\tStatus\t\tJob Title")
     for item in res:
