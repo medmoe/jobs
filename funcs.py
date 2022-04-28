@@ -36,17 +36,11 @@ def add(con, name, date, job_title=None, add=True):
     if add:
         try:
             cur.execute(f"INSERT INTO jobs VALUES('{datetime.now()}','{name}', '{job_title}', '{date}', 'applied')")
-            cur.execute("SELECT * FROM jobs")
-            res = cur.fetchall()
-            print(res)
         except sqlite3.OperationalError:
             cur.execute(''' CREATE TABLE jobs(id text, name text, job_title text, date text, status text)''')
             cur.execute(f"INSERT INTO jobs VALUES('{datetime.now()}','{name}', '{job_title}', '{date}', 'applied')")
     else:
         cur.execute(f"DELETE FROM jobs WHERE name = '{name}' AND date = '{date}'")
-        cur.execute("SELECT * FROM jobs")
-        res = cur.fetchall()
-        print(res)
 
     con.commit()
     con.close()
