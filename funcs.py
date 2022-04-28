@@ -53,7 +53,7 @@ def get(con, name, get_all=False):
     res = cur.fetchall()
     print("Company\t\tDate\t\tStatus\t\tJob Title")
     for item in res:
-        print(f'{item[1]}\t\t{item[3]}\t{item[4]}\t\t{item[2]}')
+        print(f'{item[1]:<10}\t{item[3]:<10}\t{item[4]:<10}\t{item[2]:<10}')
     con.commit()
     con.close()
 
