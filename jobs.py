@@ -11,7 +11,10 @@ if __name__ == '__main__':
 			if sys.argv[1] == '-a' or sys.argv[1] == '--add':
 				add(con, sys.argv[2], sys.argv[4], job_title=sys.argv[3])
 			elif sys.argv[1] == '-r' or sys.argv[1] == '--remove':
-				add(con, sys.argv[2], sys.argv[3], add=False)
+				if len(sys.argv) > 3:
+					add(con, sys.argv[2], date=sys.argv[3], add=False)
+				else:
+					add(con, sys.argv[2], add=False)
 			elif sys.argv[1] == '-g' or sys.argv[1] == '--get':
 				get(con, sys.argv[2])
 			elif sys.argv[1] == '-s' or sys.argv[1] == '--show-all':
@@ -21,5 +24,5 @@ if __name__ == '__main__':
 			else:
 				print("Unrecognized option, Try again !")
 		except Exception as e:
-			show_help()
+			print(e.message())
 

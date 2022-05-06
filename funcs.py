@@ -27,7 +27,7 @@ def show_help():
         """)
 
 
-def add(con, name, date, job_title=None, add=True):
+def add(con, name, date=None, job_title=None, add=True):
     """
     con: connection to the database
     name: company's name
@@ -40,7 +40,10 @@ def add(con, name, date, job_title=None, add=True):
             cur.execute(''' CREATE TABLE jobs(id text, name text, job_title text, date text, status text)''')
             cur.execute(f"INSERT INTO jobs VALUES('{datetime.now()}','{name}', '{job_title}', '{date}', 'applied')")
     else:
-        cur.execute(f"DELETE FROM jobs WHERE name = '{name}' AND date = '{date}'")
+        if date:
+            cur.execute(f"DELETE FROM jobs WHERE name = '{name}' AND date = '{date}'")
+        else:
+            cur.execute(f"DELETE FROM jobs WHERE name = '{name}'")
 
     con.commit()
     con.close()
