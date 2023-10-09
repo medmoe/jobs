@@ -18,7 +18,7 @@ if __name__ == '__main__':
     else:
         try:
             if sys.argv[1] == '-a' or sys.argv[1] == '--add':
-                add(con, sys.argv[2], sys.argv[4], job_title=sys.argv[3])
+                add(con, sys.argv[2], job_title=sys.argv[3])
             elif sys.argv[1] == '-r' or sys.argv[1] == '--remove':
                 if len(sys.argv) > 3:
                     add(con, sys.argv[2], date=sys.argv[3], add=False)
