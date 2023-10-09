@@ -1,30 +1,39 @@
-from datetime import datetime
+import csv
 import sqlite3
+from datetime import datetime
 
 
 def show_help():
     print(
         """
         jobs usage: [options] [<file name> or <job to add>]:
-            -s      --show-all  :show all existing jobs
-            -a 		--add		:add a new job
-            -r		--remove	:remove an existed job
-            -g		--get		:retrieve an existed job
-            -u		--update	:update status of the job
-            
-            rejected 	:job status flag
-            accepted	:job status flag
-            applied	:job status flag
-    
-        description: The script provides a basic tracking program of jobs applied to.
-        when adding a new job, company's name and date should be passed as arguments and job's title is optional.
-        when updating job status, company's name and status flag should be passed too. 
-        example:
+
+            Options:
+                -s, --show-all       : Show all existing jobs
+                -a, --add            : Add a new job
+                -r, --remove         : Remove an existing job
+                -g, --get            : Retrieve an existing job
+                -u, --update         : Update status of a job
+                -o, --export         : Export data to CSV file
+
+            Status Flags:
+                rejected             : Job status flag
+                accepted             : Job status flag
+                applied              : Job status flag
+
+        Description:
+            The script provides a basic tracking program for jobs applied to. 
+            When adding a new job, the company's name and date should be passed as arguments, and the job's title is optional.
+            When updating job status, the company's name and status flag should be passed too.
+
+        Examples:
             jobs.py -a Test 'Software engineer' 10/10/2020
             jobs.py -g Test
-            jobs.py -r test 10/10/2020
-            jobs.py -u Test /10/10/2020 accepted
-        """)
+            jobs.py -r Test 10/10/2020
+            jobs.py -u Test 10/10/2020 accepted
+            jobs.py -o output.csv
+        """
+    )
 
 
 def add(con, name, date=None, job_title=None, add=True):
@@ -69,3 +78,17 @@ def update_status(con, name, date, status):
     con.commit()
     con.close()
 
+
+def export_csv(con, file_name):
+    cur = con.cursor()
+    cur.execute('SELECT * FROM jobs')
+    rows = cur.fetchall()
+
+    # Write to CSV
+    with open(file_name, 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow([description[0] for description in cur.description])  # write headers
+        for row in rows:
+            writer.writerow(row)
+
+    print("done!")
